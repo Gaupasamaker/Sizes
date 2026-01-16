@@ -1,0 +1,60 @@
+.search-bar {
+    position: relative;
+    margin-bottom: var(--spacing-md);
+}
+
+.search-bar input {
+    padding-left: 44px;
+    padding-right: 44px;
+}
+
+.search-icon {
+    position: absolute;
+    left: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dark);
+    pointer-events: none;
+}
+
+.search-clear {
+    position: absolute;
+    right: var(--spacing-xs);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Brands list */
+.brands-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.brand-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.brand-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.brand-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+}
+
+.brand-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    font-size: 0.875rem;
+}
+
+.size-preview {
+    color: var(--text-muted);
+}

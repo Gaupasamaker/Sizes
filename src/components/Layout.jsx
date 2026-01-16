@@ -1,0 +1,48 @@
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Users, Settings, ChevronLeft } from 'lucide-react';
+import './Layout.css';
+
+export default function Layout({ children, title, showBack = false }) {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const isProfiles = location.pathname === '/' || location.pathname.startsWith('/profile');
+    const isSettings = location.pathname === '/settings';
+
+    return (
+        <div className="layout">
+            {/* Header */}
+            <header className="header">
+                {showBack && (
+                    <button className="header-back btn btn-ghost btn-icon" onClick={() => navigate(-1)}>
+                        <ChevronLeft size={24} />
+                    </button>
+                )}
+                <h1 className="header-title">{title || 'Sizes'}</h1>
+            </header>
+
+            {/* Main content */}
+            <main className="main-content">
+                {children}
+            </main>
+
+            {/* Bottom navigation */}
+            <nav className="bottom-nav">
+                <NavLink
+                    to="/"
+                    className={`nav-item ${isProfiles ? 'active' : ''}`}
+                >
+                    <Users size={24} />
+                    <span>Perfiles</span>
+                </NavLink>
+                <NavLink
+                    to="/settings"
+                    className={`nav-item ${isSettings ? 'active' : ''}`}
+                >
+                    <Settings size={24} />
+                    <span>Ajustes</span>
+                </NavLink>
+            </nav>
+        </div>
+    );
+}

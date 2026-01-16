@@ -1,0 +1,119 @@
+/* Size Guide Link */
+.size-guide-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.size-guide-link:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.25));
+    transform: translateY(-2px);
+}
+
+.size-guide-link svg {
+    color: var(--primary-light);
+    flex-shrink: 0;
+}
+
+.size-guide-link h4 {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.size-guide-link p {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+/* Profiles Grid */
+.profiles-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.profile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-name {
+    font-size: 1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.profile-actions .btn {
+    color: var(--text-muted);
+}
+
+.profile-actions .btn:hover {
+    color: var(--text);
+}
+
+/* Color picker */
+.color-picker {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: var(--surface-light);
+    transition: all var(--transition-fast);
+}
+
+.color-option span {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-sm);
+}
+
+.color-option:hover {
+    border-color: var(--text-muted);
+}
+
+.color-option.selected {
+    border-color: var(--primary);
+}
