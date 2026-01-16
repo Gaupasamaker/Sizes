@@ -157,6 +157,7 @@ export async function createSize(data) {
         size: data.size,
         fit: data.fit || 'normal',
         notes: data.notes || '',
+        photo: data.photo || null, // Base64 image data
         createdAt: new Date().toISOString()
     };
     await db.add('sizes', size);

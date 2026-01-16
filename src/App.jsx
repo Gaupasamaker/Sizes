@@ -5,6 +5,7 @@ import Brands from './pages/Brands';
 import BrandDetail from './pages/BrandDetail';
 import Settings from './pages/Settings';
 import SizeGuide from './pages/SizeGuide';
+import SharedProfile from './pages/SharedProfile';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/brand/:brandId" element={<BrandDetail />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/size-guide" element={<SizeGuide />} />
+          <Route path="/share/:data" element={<SharedProfile />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

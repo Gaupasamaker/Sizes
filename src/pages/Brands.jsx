@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Search, X, Tag, ChevronRight } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getProfile, getBrandsByProfile, createBrand, searchBrands, getSizesByBrand, CATEGORIES } from '../services/db';
+import { searchBrandSuggestions } from '../services/brands';
 import './Brands.css';
 
 export default function Brands() {
@@ -16,6 +17,9 @@ export default function Brands() {
     const [searchQuery, setSearchQuery] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [formData, setFormData] = useState({ name: '', notes: '' });
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         loadData();
@@ -24,6 +28,18 @@ export default function Brands() {
     useEffect(() => {
         filterBrands();
     }, [searchQuery]);
+
+    // Update suggestions when typing brand name
+    useEffect(() => {
+        if (formData.name.length >= 1) {
+            const results = searchBrandSuggestions(formData.name);
+            setSuggestions(results);
+            setShowSuggestions(results.length > 0);
+        } else {
+            setSuggestions([]);
+            setShowSuggestions(false);
+        }
+    }, [formData.name]);
 
     async function loadData() {
         try {
@@ -59,12 +75,22 @@ export default function Brands() {
 
     function openModal() {
         setFormData({ name: '', notes: '' });
+        setSuggestions([]);
+        setShowSuggestions(false);
         setModalOpen(true);
     }
 
     function closeModal() {
         setModalOpen(false);
         setFormData({ name: '', notes: '' });
+        setSuggestions([]);
+        setShowSuggestions(false);
+    }
+
+    function selectSuggestion(name) {
+        setFormData({ ...formData, name });
+        setShowSuggestions(false);
+        inputRef.current?.focus();
     }
 
     async function handleSubmit(e) {
@@ -161,14 +187,33 @@ export default function Brands() {
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="brandName">Nombre de la marca</label>
-                        <input
-                            id="brandName"
-                            type="text"
-                            placeholder="Ej: Nike, Zara, H&M..."
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            autoFocus
-                        />
+                        <div className="autocomplete-container">
+                            <input
+                                ref={inputRef}
+                                id="brandName"
+                                type="text"
+                                placeholder="Ej: Nike, Zara, H&M..."
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                                autoFocus
+                                autoComplete="off"
+                            />
+                            {showSuggestions && (
+                                <div className="suggestions-dropdown">
+                                    {suggestions.map((name, i) => (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            className="suggestion-item"
+                                            onClick={() => selectSuggestion(name)}
+                                        >
+                                            {name}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="form-group">

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Edit2, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Edit2, AlertCircle, Camera, Image, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getBrand, updateBrand, deleteBrand, getSizesByBrand, createSize, updateSize, deleteSize, CATEGORIES, FIT_OPTIONS } from '../services/db';
@@ -14,9 +14,12 @@ export default function BrandDetail() {
     const [loading, setLoading] = useState(true);
     const [sizeModalOpen, setSizeModalOpen] = useState(false);
     const [brandModalOpen, setBrandModalOpen] = useState(false);
+    const [photoModalOpen, setPhotoModalOpen] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [editingSize, setEditingSize] = useState(null);
-    const [sizeForm, setSizeForm] = useState({ category: 'tops', size: '', fit: 'normal', notes: '' });
+    const [sizeForm, setSizeForm] = useState({ category: 'tops', size: '', fit: 'normal', notes: '', photo: null });
     const [brandForm, setBrandForm] = useState({ name: '', notes: '' });
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         loadData();
@@ -45,10 +48,16 @@ export default function BrandDetail() {
     function openSizeModal(size = null) {
         if (size) {
             setEditingSize(size);
-            setSizeForm({ category: size.category, size: size.size, fit: size.fit, notes: size.notes || '' });
+            setSizeForm({
+                category: size.category,
+                size: size.size,
+                fit: size.fit,
+                notes: size.notes || '',
+                photo: size.photo || null
+            });
         } else {
             setEditingSize(null);
-            setSizeForm({ category: 'tops', size: '', fit: 'normal', notes: '' });
+            setSizeForm({ category: 'tops', size: '', fit: 'normal', notes: '', photo: null });
         }
         setSizeModalOpen(true);
     }
@@ -56,7 +65,61 @@ export default function BrandDetail() {
     function closeSizeModal() {
         setSizeModalOpen(false);
         setEditingSize(null);
-        setSizeForm({ category: 'tops', size: '', fit: 'normal', notes: '' });
+        setSizeForm({ category: 'tops', size: '', fit: 'normal', notes: '', photo: null });
+    }
+
+    // Photo handling
+    function handlePhotoCapture() {
+        fileInputRef.current?.click();
+    }
+
+    function handleFileChange(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            // Compress image
+            const img = document.createElement('img');
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxSize = 800;
+                let { width, height } = img;
+
+                if (width > height && width > maxSize) {
+                    height = (height * maxSize) / width;
+                    width = maxSize;
+                } else if (height > maxSize) {
+                    width = (width * maxSize) / height;
+                    height = maxSize;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                setSizeForm({ ...sizeForm, photo: compressedDataUrl });
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+        e.target.value = '';
+    }
+
+    function removePhoto() {
+        setSizeForm({ ...sizeForm, photo: null });
+    }
+
+    function openPhotoModal(photo) {
+        setSelectedPhoto(photo);
+        setPhotoModalOpen(true);
+    }
+
+    function closePhotoModal() {
+        setSelectedPhoto(null);
+        setPhotoModalOpen(false);
     }
 
     async function handleSizeSubmit(e) {
@@ -189,9 +252,18 @@ export default function BrandDetail() {
                                 <div className="sizes-grid">
                                     {categorySizes.map((size) => (
                                         <div key={size.id} className="size-card">
+                                            {size.photo && (
+                                                <div
+                                                    className="size-photo"
+                                                    onClick={() => openPhotoModal(size.photo)}
+                                                >
+                                                    <img src={size.photo} alt="Etiqueta" />
+                                                </div>
+                                            )}
                                             <div className="size-main">
                                                 <span className="size-value">{size.size}</span>
                                                 {getFitBadge(size.fit)}
+                                                {size.photo && <Image size={14} className="photo-indicator" />}
                                             </div>
                                             {size.notes && (
                                                 <p className="size-notes">{size.notes}</p>
@@ -231,6 +303,16 @@ export default function BrandDetail() {
             <button className="fab" onClick={() => openSizeModal()}>
                 <Plus size={24} />
             </button>
+
+            {/* Hidden file input for photo capture */}
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+            />
 
             {/* Size Modal */}
             <Modal
@@ -285,6 +367,32 @@ export default function BrandDetail() {
                         </div>
                     </div>
 
+                    {/* Photo section */}
+                    <div className="form-group">
+                        <label>Foto de etiqueta (opcional)</label>
+                        {sizeForm.photo ? (
+                            <div className="photo-preview">
+                                <img src={sizeForm.photo} alt="Etiqueta" />
+                                <button
+                                    type="button"
+                                    className="photo-remove btn btn-icon"
+                                    onClick={removePhoto}
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                type="button"
+                                className="photo-capture-btn"
+                                onClick={handlePhotoCapture}
+                            >
+                                <Camera size={20} />
+                                <span>Hacer foto a la etiqueta</span>
+                            </button>
+                        )}
+                    </div>
+
                     <div className="form-group">
                         <label htmlFor="sizeNotes">Notas (opcional)</label>
                         <input
@@ -305,6 +413,15 @@ export default function BrandDetail() {
                         </button>
                     </div>
                 </form>
+            </Modal>
+
+            {/* Photo View Modal */}
+            <Modal isOpen={photoModalOpen} onClose={closePhotoModal} title="Foto de etiqueta">
+                {selectedPhoto && (
+                    <div className="photo-full">
+                        <img src={selectedPhoto} alt="Etiqueta" />
+                    </div>
+                )}
             </Modal>
 
             {/* Brand Edit Modal */}

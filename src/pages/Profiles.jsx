@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, User, Trash2, Edit2, Ruler } from 'lucide-react';
+import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getProfiles, createProfile, updateProfile, deleteProfile, PROFILE_COLORS } from '../services/db';
+import { generateShareLink, copyToClipboard, nativeShare } from '../services/share';
 import './Profiles.css';
 
 export default function Profiles() {
@@ -12,6 +13,7 @@ export default function Profiles() {
     const [modalOpen, setModalOpen] = useState(false);
     const [editingProfile, setEditingProfile] = useState(null);
     const [formData, setFormData] = useState({ name: '', color: 'blue' });
+    const [shareMessage, setShareMessage] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -80,6 +82,29 @@ export default function Profiles() {
         openModal(profile);
     }
 
+    async function handleShare(profile, e) {
+        e.stopPropagation();
+        try {
+            const url = await generateShareLink(profile.id);
+
+            // Try native share first
+            const shared = await nativeShare(
+                `Tallas de ${profile.name}`,
+                `Mira mis tallas de ropa`,
+                url
+            );
+
+            if (!shared) {
+                // Fallback to copy
+                await copyToClipboard(url);
+                setShareMessage(`Link copiado para ${profile.name}`);
+                setTimeout(() => setShareMessage(null), 3000);
+            }
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    }
+
     if (loading) {
         return (
             <Layout title="Sizes">
@@ -124,6 +149,13 @@ export default function Profiles() {
                             <div className="profile-actions">
                                 <button
                                     className="btn btn-ghost btn-icon"
+                                    onClick={(e) => handleShare(profile, e)}
+                                    title="Compartir"
+                                >
+                                    <Share2 size={18} />
+                                </button>
+                                <button
+                                    className="btn btn-ghost btn-icon"
                                     onClick={(e) => handleEdit(profile, e)}
                                     title="Editar"
                                 >
@@ -145,6 +177,14 @@ export default function Profiles() {
             <button className="fab" onClick={() => openModal()}>
                 <Plus size={24} />
             </button>
+
+            {/* Share toast */}
+            {shareMessage && (
+                <div className="share-toast animate-slideUp">
+                    <CheckCircle size={18} />
+                    <span>{shareMessage}</span>
+                </div>
+            )}
 
             <Modal
                 isOpen={modalOpen}

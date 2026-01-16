@@ -1,0 +1,129 @@
+.shared-profile {
+    min-height: 100vh;
+    background: var(--background);
+    padding: var(--spacing-md);
+    padding-bottom: var(--spacing-xl);
+}
+
+.shared-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+}
+
+.shared-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--profile-color, var(--primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.shared-header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.shared-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.shared-brands {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.shared-brand {
+    padding: var(--spacing-md);
+}
+
+.shared-brand-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.shared-brand-notes {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.shared-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.shared-size-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--surface-light);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+}
+
+.shared-size-icon {
+    font-size: 1rem;
+}
+
+.shared-size-value {
+    font-weight: 600;
+}
+
+.shared-footer {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border-radius: var(--radius-lg);
+}
+
+.shared-footer p {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-muted);
+}
+
+/* Error and loading states */
+.shared-profile-error,
+.shared-profile-loading {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    text-align: center;
+    background: var(--background);
+}
+
+.shared-profile-error svg {
+    color: var(--error);
+}
+
+.shared-profile-error h2 {
+    font-size: 1.5rem;
+}
+
+.shared-profile-error p {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.shared-empty {
+    padding: var(--spacing-lg);
+    text-align: center;
+    color: var(--text-muted);
+}
