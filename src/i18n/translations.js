@@ -31,6 +31,10 @@ export const translations = {
         check_sizes: 'Revisar tallas',
         check_sizes_hint: 'Han pasado 3 meses. ¿Siguen valiendo estas tallas?',
         sizes_checked: '¡Tallas confirmadas!',
+        profile_type: 'Tipo de perfil',
+        type_man: 'Hombre',
+        type_woman: 'Mujer',
+        type_child: 'Niño/a',
 
         // Brands
         brands: 'Marcas',
@@ -148,6 +152,10 @@ export const translations = {
         check_sizes: 'Check sizes',
         check_sizes_hint: 'It\'s been 3 months. Do these sizes still fit?',
         sizes_checked: 'Sizes confirmed!',
+        profile_type: 'Profile type',
+        type_man: 'Man',
+        type_woman: 'Woman',
+        type_child: 'Child/Baby',
 
         // Brands
         brands: 'Brands',

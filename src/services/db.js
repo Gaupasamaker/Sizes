@@ -56,8 +56,8 @@ export async function createProfile(data) {
         avatar: data.avatar || data.name.charAt(0).toUpperCase(),
         color: data.color || 'blue',
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(), // Added updatedAt
-        isChild: data.isChild || false, // Initialize isChild
+        updatedAt: new Date().toISOString(),
+        type: data.type || (data.isChild ? 'child' : 'man'), // Initialize type with fallback
         lastCheck: new Date().toISOString() // Initialize lastCheck
     };
     await db.add('profiles', profile);

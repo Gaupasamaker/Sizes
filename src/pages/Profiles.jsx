@@ -13,7 +13,7 @@ export default function Profiles() {
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [editingProfile, setEditingProfile] = useState(null);
-    const [formData, setFormData] = useState({ name: '', color: 'blue', isChild: false });
+    const [formData, setFormData] = useState({ name: '', color: 'blue', type: 'man' });
     const [shareMessage, setShareMessage] = useState(null);
     const navigate = useNavigate();
     const { language, setLanguage, t } = useLanguage();
@@ -36,10 +36,12 @@ export default function Profiles() {
     function openModal(profile = null) {
         if (profile) {
             setEditingProfile(profile);
-            setFormData({ name: profile.name, color: profile.color, isChild: profile.isChild || false });
+            // Fallback for legacy isChild
+            const type = profile.type || (profile.isChild ? 'child' : 'man');
+            setFormData({ name: profile.name, color: profile.color, type });
         } else {
             setEditingProfile(null);
-            setFormData({ name: '', color: 'blue', isChild: false });
+            setFormData({ name: '', color: 'blue', type: 'man' });
         }
         setModalOpen(true);
     }
@@ -47,7 +49,7 @@ export default function Profiles() {
     function closeModal() {
         setModalOpen(false);
         setEditingProfile(null);
-        setFormData({ name: '', color: 'blue', isChild: false });
+        setFormData({ name: '', color: 'blue', type: 'man' });
     }
 
     function toggleLanguage() {
@@ -56,7 +58,8 @@ export default function Profiles() {
 
     // Check if profile needs size review (3 months)
     function checkGrowthReminder(profile) {
-        if (!profile.isChild || !profile.lastCheck) return false;
+        const isChild = profile.type === 'child' || profile.isChild === true;
+        if (!isChild || !profile.lastCheck) return false;
 
         const lastCheck = new Date(profile.lastCheck);
         const threeMonthsAgo = new Date();
@@ -173,7 +176,7 @@ export default function Profiles() {
                             >
                                 <div className="profile-header">
                                     <div className={`profile-avatar profile-color-${profile.color}`}>
-                                        {profile.isChild ? <Baby size={24} /> : <User size={24} />}
+                                        {(profile.type === 'child' || profile.isChild) ? <Baby size={24} /> : <User size={24} />}
                                     </div>
                                     <div className="profile-info">
                                         <h3>{profile.name}</h3>
@@ -264,18 +267,37 @@ export default function Profiles() {
                         </div>
                     </div>
 
-                    <div className="form-group checkbox-group">
-                        <label className="checkbox-label">
-                            <input
-                                type="checkbox"
-                                checked={formData.isChild}
-                                onChange={(e) => setFormData({ ...formData, isChild: e.target.checked })}
-                            />
-                            <div className="checkbox-text">
-                                <span>{t('is_child')}</span>
-                                <small>{t('is_child_hint')}</small>
-                            </div>
-                        </label>
+                    <div className="form-group">
+                        <label>{t('profile_type')}</label>
+                        <div className="type-picker">
+                            <button
+                                type="button"
+                                className={`type-option ${formData.type === 'man' ? 'selected' : ''}`}
+                                onClick={() => setFormData({ ...formData, type: 'man' })}
+                            >
+                                <User size={20} />
+                                <span>{t('type_man')}</span>
+                            </button>
+                            <button
+                                type="button"
+                                className={`type-option ${formData.type === 'woman' ? 'selected' : ''}`}
+                                onClick={() => setFormData({ ...formData, type: 'woman' })}
+                            >
+                                <User size={20} />
+                                <span>{t('type_woman')}</span>
+                            </button>
+                            <button
+                                type="button"
+                                className={`type-option ${formData.type === 'child' ? 'selected' : ''}`}
+                                onClick={() => setFormData({ ...formData, type: 'child' })}
+                            >
+                                <Baby size={20} />
+                                <span>{t('type_child')}</span>
+                            </button>
+                        </div>
+                        {formData.type === 'child' && (
+                            <small className="type-hint">{t('is_child_hint')}</small>
+                        )}
                     </div>
 
                     <div className="modal-actions">
