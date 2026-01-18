@@ -28,6 +28,14 @@
     font-weight: 600;
 }
 
+.header-logo {
+    height: 48px;
+    width: auto;
+    margin-right: auto;
+    object-fit: contain;
+    display: block;
+}
+
 /* Language selector in header */
 .language-selector {
     display: flex;

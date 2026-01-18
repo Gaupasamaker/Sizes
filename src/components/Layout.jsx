@@ -24,7 +24,11 @@ export default function Layout({ children, title, showBack = false }) {
                         <ChevronLeft size={24} />
                     </button>
                 )}
-                <h1 className="header-title">{title || 'Sizes'}</h1>
+                {(title === 'Sizes' || title === t('app_name')) ? (
+                    <img src="/logo-sizes.png" alt="Sizes" className="header-logo" />
+                ) : (
+                    <h1 className="header-title">{title}</h1>
+                )}
 
                 <button className="language-selector" onClick={toggleLanguage} title={t('language')}>
                     <Globe size={16} />
