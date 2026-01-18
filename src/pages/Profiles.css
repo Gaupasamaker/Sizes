@@ -106,15 +106,13 @@
     background: rgba(239, 68, 68, 0.05);
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--radius-sm);
-    margin-bottom: -4px;
+    margin-top: -8px;
 }
 
 .profile-actions {
     display: flex;
     gap: var(--spacing-xs);
-    justify-content: flex-end;
-    width: 100%;
-    margin-top: -8px;
+    flex-shrink: 0;
 }
 
 .profile-actions .btn {
