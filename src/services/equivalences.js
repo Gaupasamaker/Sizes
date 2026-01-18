@@ -105,11 +105,47 @@ export function findEquivalentSizes(category, size) {
 }
 
 // Get all equivalence tables for info page
-export function getAllEquivalences() {
+export function getAllEquivalences(language = 'es') {
+    const translations = {
+        es: {
+            tops: { title: '👕 Camisetas / Tops', shortTitle: 'Camisetas' },
+            bottoms: { title: '👖 Pantalones', shortTitle: 'Pantalones' },
+            shoes: { title: '👟 Calzado', shortTitle: 'Calzado' },
+            outerwear: { title: '🧥 Abrigos', shortTitle: 'Abrigos' },
+            headers: {
+                chest: 'Medidas (pecho cm)',
+                waist: 'Cintura (cm)',
+                usMen: 'US Hombre',
+                usWomen: 'US Mujer',
+            }
+        },
+        en: {
+            tops: { title: '👕 Tops / T-Shirts', shortTitle: 'Tops' },
+            bottoms: { title: '👖 Pants / Trousers', shortTitle: 'Pants' },
+            shoes: { title: '👟 Shoes / Footwear', shortTitle: 'Shoes' },
+            outerwear: { title: '🧥 Outerwear / Coats', shortTitle: 'Coats' },
+            headers: {
+                chest: 'Chest (cm)',
+                waist: 'Waist (cm)',
+                usMen: 'US Men',
+                usWomen: 'US Women',
+            }
+        }
+    };
+
+    const t = translations[language] || translations.es;
+
+    // Create translated headers for shoes
+    const shoesHeaders = ['EU', 'UK', t.headers.usMen, t.headers.usWomen, 'cm'];
+    const topsHeaders = ['EU', 'UK', 'US', t.headers.chest];
+    const bottomsHeaders = ['EU', 'UK', 'US', t.headers.waist];
+    const outerwearHeaders = ['EU', 'UK', 'US', t.headers.chest];
+
     return [
-        { id: 'tops', title: '👕 Camisetas / Tops', data: TOPS_EQUIVALENCES },
-        { id: 'bottoms', title: '👖 Pantalones', data: BOTTOMS_EQUIVALENCES },
-        { id: 'shoes', title: '👟 Calzado', data: SHOES_EQUIVALENCES },
-        { id: 'outerwear', title: '🧥 Abrigos', data: OUTERWEAR_EQUIVALENCES },
+        { id: 'tops', ...t.tops, data: { headers: topsHeaders, rows: TOPS_EQUIVALENCES.rows } },
+        { id: 'bottoms', ...t.bottoms, data: { headers: bottomsHeaders, rows: BOTTOMS_EQUIVALENCES.rows } },
+        { id: 'shoes', ...t.shoes, data: { headers: shoesHeaders, rows: SHOES_EQUIVALENCES.rows } },
+        { id: 'outerwear', ...t.outerwear, data: { headers: outerwearHeaders, rows: OUTERWEAR_EQUIVALENCES.rows } },
     ];
 }
+

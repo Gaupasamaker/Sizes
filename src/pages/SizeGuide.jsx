@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getAllEquivalences } from '../services/equivalences';
+import { useLanguage } from '../hooks/useLanguage';
 import './SizeGuide.css';
 
 export default function SizeGuide() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('tops');
-    const equivalences = getAllEquivalences();
+    const { language, t } = useLanguage();
+    const equivalences = getAllEquivalences(language);
 
     const activeEquivalence = equivalences.find(e => e.id === activeTab);
 
@@ -17,12 +19,12 @@ export default function SizeGuide() {
                 <button className="btn btn-ghost btn-icon" onClick={() => navigate(-1)}>
                     <ArrowLeft size={24} />
                 </button>
-                <h1>Guía de Tallas</h1>
+                <h1>{t('size_guide')}</h1>
             </header>
 
             <div className="size-guide-info">
                 <Info size={18} />
-                <p>Estas tablas son orientativas. Cada marca puede tener variaciones.</p>
+                <p>{t('size_guide_info')}</p>
             </div>
 
             {/* Category tabs */}
@@ -33,7 +35,7 @@ export default function SizeGuide() {
                         className={`tab-btn ${activeTab === eq.id ? 'active' : ''}`}
                         onClick={() => setActiveTab(eq.id)}
                     >
-                        {eq.title.split(' ')[0]}
+                        {eq.shortTitle}
                     </button>
                 ))}
             </div>
@@ -66,12 +68,12 @@ export default function SizeGuide() {
             )}
 
             <div className="size-guide-tips">
-                <h3>💡 Consejos</h3>
+                <h3>💡 {t('tips')}</h3>
                 <ul>
-                    <li><strong>Mide siempre</strong>: usa una cinta métrica para conocer tus medidas exactas.</li>
-                    <li><strong>Entre dos tallas</strong>: si estás entre dos, elige la mayor si prefieres holgura.</li>
-                    <li><strong>Calzado</strong>: mide tu pie al final del día, cuando está más hinchado.</li>
-                    <li><strong>Guarda tus tallas</strong>: cada marca tiene diferencias, registra las tuyas en Sizes.</li>
+                    <li><strong>{language === 'es' ? 'Mide siempre' : 'Always measure'}</strong>: {language === 'es' ? 'usa una cinta métrica para conocer tus medidas exactas.' : 'use a tape measure to know your exact measurements.'}</li>
+                    <li><strong>{language === 'es' ? 'Entre dos tallas' : 'Between sizes'}</strong>: {language === 'es' ? 'si estás entre dos, elige la mayor si prefieres holgura.' : 'if you\'re between two, choose the larger for a looser fit.'}</li>
+                    <li><strong>{language === 'es' ? 'Calzado' : 'Shoes'}</strong>: {language === 'es' ? 'mide tu pie al final del día, cuando está más hinchado.' : 'measure your feet at the end of the day when they\'re most swollen.'}</li>
+                    <li><strong>{language === 'es' ? 'Guarda tus tallas' : 'Save your sizes'}</strong>: {language === 'es' ? 'cada marca tiene diferencias, registra las tuyas en Sizes.' : 'each brand differs, record yours in Sizes.'}</li>
                 </ul>
             </div>
         </div>
