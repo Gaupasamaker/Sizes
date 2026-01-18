@@ -63,6 +63,30 @@ export const OUTERWEAR_EQUIVALENCES = {
     ]
 };
 
+// Kids Shoes
+export const KIDS_SHOES_EQUIVALENCES = {
+    headers: ['EU', 'UK', 'US', 'cm', 'Edad aprox.'],
+    rows: [
+        ['19', '3', '3.5', '11.5', '9-12 m'],
+        ['20', '3.5', '4', '12', '12-15 m'],
+        ['21', '4.5', '5', '13', '15-18 m'],
+        ['22', '5', '6', '13.5', '18-24 m'],
+        ['23', '6', '7', '14', '2 años'],
+        ['24', '7', '8', '15', '2-3 años'],
+        ['25', '8', '8', '15.5', '3 años'],
+        ['26', '8.5', '9', '16.5', '3-4 años'],
+        ['27', '9', '10', '17', '4 años'],
+        ['28', '10', '11', '17.5', '5 años'],
+        ['29', '11', '12', '18.5', '5-6 años'],
+        ['30', '11.5', '12.5', '19', '6 años'],
+        ['31', '12.5', '13', '19.5', '7 años'],
+        ['32', '13', '13.5', '20.5', '8 años'],
+        ['33', '1', '1.5', '21', '8-9 años'],
+        ['34', '1.5', '2', '21.5', '9 años'],
+        ['35', '2.5', '3', '22', '10 años'],
+    ]
+};
+
 // Get equivalence table by category
 export function getEquivalenceByCategory(category) {
     switch (category) {
@@ -74,6 +98,8 @@ export function getEquivalenceByCategory(category) {
             return { title: 'Calzado', data: SHOES_EQUIVALENCES };
         case 'outerwear':
             return { title: 'Abrigos / Chaquetas', data: OUTERWEAR_EQUIVALENCES };
+        case 'kids_shoes':
+            return { title: 'Calzado Infantil', data: KIDS_SHOES_EQUIVALENCES };
         default:
             return null;
     }
@@ -135,17 +161,47 @@ export function getAllEquivalences(language = 'es') {
 
     const t = translations[language] || translations.es;
 
-    // Create translated headers for shoes
+    // Create translated headers
     const shoesHeaders = ['EU', 'UK', t.headers.usMen, t.headers.usWomen, 'cm'];
     const topsHeaders = ['EU', 'UK', 'US', t.headers.chest];
     const bottomsHeaders = ['EU', 'UK', 'US', t.headers.waist];
     const outerwearHeaders = ['EU', 'UK', 'US', t.headers.chest];
 
     return [
-        { id: 'tops', ...t.tops, data: { headers: topsHeaders, rows: TOPS_EQUIVALENCES.rows } },
-        { id: 'bottoms', ...t.bottoms, data: { headers: bottomsHeaders, rows: BOTTOMS_EQUIVALENCES.rows } },
-        { id: 'shoes', ...t.shoes, data: { headers: shoesHeaders, rows: SHOES_EQUIVALENCES.rows } },
-        { id: 'outerwear', ...t.outerwear, data: { headers: outerwearHeaders, rows: OUTERWEAR_EQUIVALENCES.rows } },
+        {
+            id: 'tops',
+            ...t.tops,
+            data: { headers: topsHeaders, rows: TOPS_EQUIVALENCES.rows },
+            gender: ['man', 'woman']
+        },
+        {
+            id: 'bottoms',
+            ...t.bottoms,
+            data: { headers: bottomsHeaders, rows: BOTTOMS_EQUIVALENCES.rows },
+            gender: ['man']
+        },
+        {
+            id: 'shoes',
+            ...t.shoes,
+            data: { headers: shoesHeaders, rows: SHOES_EQUIVALENCES.rows },
+            gender: ['man', 'woman'],
+            hasGenderColumns: true
+        },
+        {
+            id: 'outerwear',
+            ...t.outerwear,
+            data: { headers: outerwearHeaders, rows: OUTERWEAR_EQUIVALENCES.rows },
+            gender: ['man', 'woman']
+        },
+        {
+            id: 'kids_shoes',
+            title: language === 'es' ? '👟 Calzado Infantil' : '👟 Kids Shoes',
+            shortTitle: language === 'es' ? 'Niños' : 'Kids',
+            data: {
+                headers: language === 'es' ? ['EU', 'UK', 'US', 'cm', 'Edad aprox.'] : ['EU', 'UK', 'US', 'cm', 'Approx Age'],
+                rows: KIDS_SHOES_EQUIVALENCES.rows
+            },
+            gender: ['child']
+        }
     ];
 }
-

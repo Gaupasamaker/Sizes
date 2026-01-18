@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
+import { Plus, User, CircleUser, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getProfiles, createProfile, updateProfile, deleteProfile, PROFILE_COLORS } from '../services/db';
@@ -176,7 +176,9 @@ export default function Profiles() {
                             >
                                 <div className="profile-header">
                                     <div className={`profile-avatar profile-color-${profile.color}`}>
-                                        {(profile.type === 'child' || profile.isChild) ? <Baby size={24} /> : <User size={24} />}
+                                        {profile.type === 'woman' ? <CircleUser size={24} /> :
+                                            (profile.type === 'child' || profile.isChild) ? <Baby size={24} /> :
+                                                <User size={24} />}
                                     </div>
                                     <div className="profile-info">
                                         <h3>{profile.name}</h3>
@@ -283,7 +285,7 @@ export default function Profiles() {
                                 className={`type-option ${formData.type === 'woman' ? 'selected' : ''}`}
                                 onClick={() => setFormData({ ...formData, type: 'woman' })}
                             >
-                                <User size={20} />
+                                <CircleUser size={20} />
                                 <span>{t('type_woman')}</span>
                             </button>
                             <button

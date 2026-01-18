@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowLeft, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Info, User, Baby } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getAllEquivalences } from '../services/equivalences';
 import { useLanguage } from '../hooks/useLanguage';
@@ -7,11 +7,48 @@ import './SizeGuide.css';
 
 export default function SizeGuide() {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('tops');
+    const [activeGender, setActiveGender] = useState('man');
+    const [activeTab, setActiveTab] = useState(null);
     const { language, t } = useLanguage();
-    const equivalences = getAllEquivalences(language);
 
-    const activeEquivalence = equivalences.find(e => e.id === activeTab);
+    // Get all tables
+    const allEquivalences = getAllEquivalences(language);
+
+    // Filter by gender
+    const filteredEquivalences = allEquivalences.filter(eq =>
+        eq.gender.includes(activeGender)
+    );
+
+    // Set default tab when gender changes
+    useEffect(() => {
+        if (filteredEquivalences.length > 0) {
+            // Try to keep same category if possible, else first available
+            const exists = filteredEquivalences.find(eq => eq.id === activeTab);
+            if (!exists) {
+                setActiveTab(filteredEquivalences[0].id);
+            }
+        }
+    }, [activeGender, language]);
+
+    const activeEquivalence = filteredEquivalences.find(e => e.id === activeTab);
+
+    // Filter columns if needed (e.g. Shoes US Men vs Women)
+    const getFilteredHeaders = (eq) => {
+        if (eq.hasGenderColumns && eq.id === 'shoes') {
+            // Index 2 is US Men, 3 is US Women
+            const hideIndex = activeGender === 'man' ? 3 : 2;
+            return eq.data.headers.filter((_, i) => i !== hideIndex);
+        }
+        return eq.data.headers;
+    };
+
+    const getFilteredRow = (eq, row) => {
+        if (eq.hasGenderColumns && eq.id === 'shoes') {
+            const hideIndex = activeGender === 'man' ? 3 : 2;
+            return row.filter((_, i) => i !== hideIndex);
+        }
+        return row;
+    };
 
     return (
         <div className="size-guide">
@@ -22,23 +59,50 @@ export default function SizeGuide() {
                 <h1>{t('size_guide')}</h1>
             </header>
 
+            {/* Gender Selector */}
+            <div className="guide-gender-selector">
+                <button
+                    className={`gender-btn ${activeGender === 'man' ? 'active' : ''}`}
+                    onClick={() => setActiveGender('man')}
+                >
+                    <User size={18} />
+                    <span>{t('type_man')}</span>
+                </button>
+                <button
+                    className={`gender-btn ${activeGender === 'woman' ? 'active' : ''}`}
+                    onClick={() => setActiveGender('woman')}
+                >
+                    <User size={18} />
+                    <span>{t('type_woman')}</span>
+                </button>
+                <button
+                    className={`gender-btn ${activeGender === 'child' ? 'active' : ''}`}
+                    onClick={() => setActiveGender('child')}
+                >
+                    <Baby size={18} />
+                    <span>{t('type_child')}</span>
+                </button>
+            </div>
+
             <div className="size-guide-info">
                 <Info size={18} />
                 <p>{t('size_guide_info')}</p>
             </div>
 
             {/* Category tabs */}
-            <div className="size-guide-tabs">
-                {equivalences.map((eq) => (
-                    <button
-                        key={eq.id}
-                        className={`tab-btn ${activeTab === eq.id ? 'active' : ''}`}
-                        onClick={() => setActiveTab(eq.id)}
-                    >
-                        {eq.shortTitle}
-                    </button>
-                ))}
-            </div>
+            {filteredEquivalences.length > 0 && (
+                <div className="size-guide-tabs">
+                    {filteredEquivalences.map((eq) => (
+                        <button
+                            key={eq.id}
+                            className={`tab-btn ${activeTab === eq.id ? 'active' : ''}`}
+                            onClick={() => setActiveTab(eq.id)}
+                        >
+                            {eq.shortTitle}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             {/* Equivalence table */}
             {activeEquivalence && (
@@ -48,7 +112,7 @@ export default function SizeGuide() {
                         <table className="equivalence-table">
                             <thead>
                                 <tr>
-                                    {activeEquivalence.data.headers.map((header, i) => (
+                                    {getFilteredHeaders(activeEquivalence).map((header, i) => (
                                         <th key={i}>{header}</th>
                                     ))}
                                 </tr>
@@ -56,7 +120,7 @@ export default function SizeGuide() {
                             <tbody>
                                 {activeEquivalence.data.rows.map((row, i) => (
                                     <tr key={i}>
-                                        {row.map((cell, j) => (
+                                        {getFilteredRow(activeEquivalence, row).map((cell, j) => (
                                             <td key={j}>{cell}</td>
                                         ))}
                                     </tr>
