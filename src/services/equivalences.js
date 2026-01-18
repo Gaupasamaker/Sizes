@@ -1,7 +1,7 @@
 // Size equivalence tables for different clothing categories
 
-// Tops (camisetas, camisas)
-export const TOPS_EQUIVALENCES = {
+// Men Tops (camisetas, camisas)
+export const MEN_TOPS_EQUIVALENCES = {
     headers: ['EU', 'UK', 'US', 'Medidas (pecho cm)'],
     rows: [
         ['XS', '32-34', 'XS', '86-89'],
@@ -14,8 +14,21 @@ export const TOPS_EQUIVALENCES = {
     ]
 };
 
-// Bottoms (pantalones)
-export const BOTTOMS_EQUIVALENCES = {
+// Women Tops
+export const WOMEN_TOPS_EQUIVALENCES = {
+    headers: ['EU', 'UK', 'US', 'Medidas (pecho cm)'],
+    rows: [
+        ['34 (XS)', '6', '2', '80-84'],
+        ['36 (S)', '8', '4', '85-89'],
+        ['38 (M)', '10', '6', '90-94'],
+        ['40 (L)', '12', '8', '95-100'],
+        ['42 (XL)', '14', '10', '101-106'],
+        ['44 (XXL)', '16', '12', '107-112'],
+    ]
+};
+
+// Men Bottoms (pantalones)
+export const MEN_BOTTOMS_EQUIVALENCES = {
     headers: ['EU', 'UK', 'US', 'Cintura (cm)'],
     rows: [
         ['38', '28', '28', '71-74'],
@@ -26,6 +39,18 @@ export const BOTTOMS_EQUIVALENCES = {
         ['48', '38', '38', '96-99'],
         ['50', '40', '40', '101-104'],
         ['52', '42', '42', '106-109'],
+    ]
+};
+
+// Women Bottoms
+export const WOMEN_BOTTOMS_EQUIVALENCES = {
+    headers: ['EU', 'UK', 'US', 'Cintura (cm)'],
+    rows: [
+        ['34 (XS)', '6', '25', '60-64'],
+        ['36 (S)', '8', '26-27', '65-69'],
+        ['38 (M)', '10', '28-29', '70-74'],
+        ['40 (L)', '12', '30-31', '75-79'],
+        ['42 (XL)', '14', '32', '80-85'],
     ]
 };
 
@@ -91,9 +116,13 @@ export const KIDS_SHOES_EQUIVALENCES = {
 export function getEquivalenceByCategory(category) {
     switch (category) {
         case 'tops':
-            return { title: 'Camisetas / Tops', data: TOPS_EQUIVALENCES };
+            return { title: 'Camisetas / Tops', data: MEN_TOPS_EQUIVALENCES };
+        case 'women_tops':
+            return { title: 'Camisetas / Tops (Mujer)', data: WOMEN_TOPS_EQUIVALENCES };
         case 'bottoms':
-            return { title: 'Pantalones', data: BOTTOMS_EQUIVALENCES };
+            return { title: 'Pantalones', data: MEN_BOTTOMS_EQUIVALENCES };
+        case 'women_bottoms':
+            return { title: 'Pantalones (Mujer)', data: WOMEN_BOTTOMS_EQUIVALENCES };
         case 'shoes':
             return { title: 'Calzado', data: SHOES_EQUIVALENCES };
         case 'outerwear':
@@ -106,6 +135,8 @@ export function getEquivalenceByCategory(category) {
 }
 
 // Find equivalent sizes based on input
+// NOTE: This basic functionality currently searches in basic male tables for simplification
+// Ideally it should receive gender as context to search in correct table
 export function findEquivalentSizes(category, size) {
     const equivalence = getEquivalenceByCategory(category);
     if (!equivalence) return null;
@@ -168,18 +199,33 @@ export function getAllEquivalences(language = 'es') {
     const outerwearHeaders = ['EU', 'UK', 'US', t.headers.chest];
 
     return [
+        // MEN
         {
             id: 'tops',
             ...t.tops,
-            data: { headers: topsHeaders, rows: TOPS_EQUIVALENCES.rows },
-            gender: ['man', 'woman']
+            data: { headers: topsHeaders, rows: MEN_TOPS_EQUIVALENCES.rows },
+            gender: ['man']
         },
         {
             id: 'bottoms',
             ...t.bottoms,
-            data: { headers: bottomsHeaders, rows: BOTTOMS_EQUIVALENCES.rows },
+            data: { headers: bottomsHeaders, rows: MEN_BOTTOMS_EQUIVALENCES.rows },
             gender: ['man']
         },
+        // WOMEN
+        {
+            id: 'women_tops',
+            ...t.tops,
+            data: { headers: topsHeaders, rows: WOMEN_TOPS_EQUIVALENCES.rows },
+            gender: ['woman']
+        },
+        {
+            id: 'women_bottoms',
+            ...t.bottoms,
+            data: { headers: bottomsHeaders, rows: WOMEN_BOTTOMS_EQUIVALENCES.rows },
+            gender: ['woman']
+        },
+        // UNISEX / SHARED
         {
             id: 'shoes',
             ...t.shoes,
@@ -193,6 +239,7 @@ export function getAllEquivalences(language = 'es') {
             data: { headers: outerwearHeaders, rows: OUTERWEAR_EQUIVALENCES.rows },
             gender: ['man', 'woman']
         },
+        // KIDS
         {
             id: 'kids_shoes',
             title: language === 'es' ? '👟 Calzado Infantil' : '👟 Kids Shoes',

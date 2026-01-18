@@ -51,16 +51,19 @@
 }
 
 /* Dynamic border and background based on profile color */
+/* Dynamic border and background based on profile color */
 .profile-card[class*="profile-border-"] {
     border-left-width: 5px;
     border-left-color: var(--profile-color);
+    background: linear-gradient(to right,
+            color-mix(in srgb, var(--profile-color) 8%, transparent),
+            transparent);
 }
 
-.profile-card[class*="profile-border-"]:hover {
+.profile-card[class*="profile-border-"]:active {
     background: linear-gradient(to right,
-            color-mix(in srgb, var(--profile-color) 10%, transparent),
+            color-mix(in srgb, var(--profile-color) 15%, transparent),
             transparent);
-    transform: translateX(4px);
 }
 
 .profile-header {
