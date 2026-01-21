@@ -39,13 +39,13 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    height: 72px;
-    /* Much larger logo as requested */
+    height: 80px;
+    /* Increased size as requested */
     width: auto;
     object-fit: contain;
     pointer-events: none;
-    filter: drop-shadow(0 2px 4px rgba(197, 160, 101, 0.2));
-    /* Gold shadow */
+    filter: drop-shadow(0 2px 8px rgba(197, 160, 101, 0.4));
+    /* Enhanced gold shadow */
 }
 
 /* Language selector in header */

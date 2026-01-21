@@ -83,12 +83,33 @@
     --text: #F9F9F7;
     /* Cream text on dark */
     --text-muted: #9CA3AF;
+    --text-inverse: #0F1525;
 
     --border: #2C3A5C;
 
     --stitch-paper-texture: none;
     /* No paper texture in dark mode or subtle grain */
+    --stitch-gold-light: #C5A065;
+    /* Darker gold for better contrast on dark */
+    --stitch-grey: #2C3A5C;
   }
+}
+
+/* Force dark mode via class if toggled manually */
+[data-theme="dark"] {
+  --background: #0F1525;
+  --surface: #1A233A;
+  --surface-light: #232E48;
+
+  --text: #F9F9F7;
+  --text-muted: #9CA3AF;
+  --text-inverse: #0F1525;
+
+  --border: #2C3A5C;
+
+  --stitch-paper-texture: none;
+  --stitch-gold-light: #C5A065;
+  --stitch-grey: #2C3A5C;
 }
 
 body {

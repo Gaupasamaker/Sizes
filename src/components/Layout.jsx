@@ -24,8 +24,8 @@ export default function Layout({ children, title, showBack = false }) {
                         <ChevronLeft size={24} />
                     </button>
                 )}
-                {(title === 'Sizes' || title === t('app_name')) ? (
-                    <img src="/logo-sizes-transparent.png" alt="Sizes" className="header-logo" />
+                {(!title || title === 'Sizes' || title === t('app_name')) ? (
+                    <img src="/logo-sizes-transparent.png" alt="Sizes" className="header-logo animate-fadeIn" />
                 ) : (
                     <h1 className="header-title">{title}</h1>
                 )}
