@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Plus, User, CircleUser, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
-import { Plus, User, CircleUser, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
 import ReloadPrompt from '../components/ReloadPrompt';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
