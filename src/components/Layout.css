@@ -3,6 +3,8 @@
     flex-direction: column;
     min-height: 100vh;
     min-height: 100dvh;
+    background-color: var(--background);
+    background-image: var(--stitch-paper-texture);
 }
 
 /* Header */
@@ -10,12 +12,17 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    padding: var(--spacing-md);
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: transparent;
+    /* Transparent to show texture */
+    /* Removed hard border and shadow for cleaner look, maybe subtle line later */
+    border-bottom: 1px dashed var(--stitch-gold-light);
+    /* Stitch effect */
     position: sticky;
     top: 0;
     z-index: 10;
+    backdrop-filter: blur(8px);
+    /* Optional glass effect */
 }
 
 .header-back {
@@ -32,11 +39,13 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    height: 60px;
+    height: 72px;
+    /* Much larger logo as requested */
     width: auto;
     object-fit: contain;
-    /* Ensure pointer events work if needed, though img usually doesn't capture clicks unless wrapped */
     pointer-events: none;
+    filter: drop-shadow(0 2px 4px rgba(197, 160, 101, 0.2));
+    /* Gold shadow */
 }
 
 /* Language selector in header */
@@ -46,8 +55,8 @@
     align-items: center;
     gap: var(--spacing-xs);
     padding: var(--spacing-xs) var(--spacing-sm);
-    background: var(--surface-light);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--stitch-gold-light);
     border-radius: var(--radius-md);
     color: var(--text-muted);
     font-size: 0.75rem;
@@ -57,9 +66,9 @@
 }
 
 .language-selector:hover {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary-light);
-    border-color: var(--primary);
+    background: rgba(197, 160, 101, 0.1);
+    color: var(--stitch-navy);
+    border-color: var(--stitch-gold);
 }
 
 /* Main content */
@@ -78,9 +87,12 @@
     right: 0;
     display: flex;
     background: var(--surface);
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--stitch-gold-light);
+    /* Stitch border */
     padding-bottom: var(--safe-area-bottom);
     z-index: 50;
+    box-shadow: 0 -4px 20px rgba(197, 160, 101, 0.1);
+    /* Golden glow up */
 }
 
 .nav-item {
@@ -98,13 +110,14 @@
 }
 
 .nav-item:hover {
-    color: var(--text);
+    color: var(--stitch-navy);
 }
 
 .nav-item.active {
-    color: var(--primary-light);
+    color: var(--stitch-gold);
 }
 
 .nav-item.active svg {
     transform: scale(1.1);
+    filter: drop-shadow(0 2px 4px rgba(197, 160, 101, 0.3));
 }

@@ -182,6 +182,11 @@ export default function Profiles() {
                                     </div>
                                     <div className="profile-info">
                                         <h3>{profile.name}</h3>
+                                        <span>
+                                            {profile.type === 'woman' ? t('type_woman') :
+                                                (profile.type === 'child' || profile.isChild) ? t('type_child') :
+                                                    t('type_man')}
+                                        </span>
                                         {needsCheck && (
                                             <div className="growth-warning" onClick={(e) => handleCheckSizes(profile, e)}>
                                                 <Clock size={14} />

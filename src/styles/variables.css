@@ -1,62 +1,114 @@
 :root {
-  /* Colors - Dark mode (default) */
-  --primary: #6366f1;
-  --primary-light: #818cf8;
-  --primary-dark: #4f46e5;
-  --background: #0f172a;
-  --surface: #1e293b;
-  --surface-light: #334155;
-  --text: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-dark: #64748b;
-  --success: #22c55e;
-  --success-light: #4ade80;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --border: #334155;
+  /* Stitch Luxury Palette */
+  --stitch-cream: #F9F9F7;
+  --stitch-cream-dark: #F0F0ED;
+  --stitch-navy: #1A233A;
+  --stitch-navy-light: #2C3A5C;
+  --stitch-gold: #C5A065;
+  --stitch-gold-light: #D4B480;
+  --stitch-grey: #E5E5E5;
+  --stitch-paper-texture: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+
+  /* Semantic Colors Mapped to Stitch */
+  --background: var(--stitch-cream);
+  --surface: #FFFFFF;
+  --surface-light: #FFFFFF;
+  /* Cards are white on cream bg */
+
+  --primary: var(--stitch-navy);
+  --primary-light: var(--stitch-navy-light);
+  --primary-dark: #0F1525;
+
+  --secondary: var(--stitch-gold);
+  --accent: var(--stitch-gold);
+
+  --text: var(--stitch-navy);
+  --text-muted: #6B7280;
+  /* Neutral grey for secondary text */
+  --text-inverse: #FFFFFF;
+
+  --border: var(--stitch-grey);
+
+  /* Status Colors (Muted for elegance) */
+  --success: #4E8D7C;
+  --warning: #D4A373;
+  --error: #B85C5C;
+
+  /* Profile Colors (Muted/Classic) */
+  --profile-blue: #3E5F8A;
+  --profile-pink: #D48C98;
+  --profile-green: #6B8E6B;
+  --profile-orange: #C57B57;
+
+  /* Typography */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Lato', sans-serif;
 
   /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
 
-  /* Border radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  /* Layout */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  /* Slightly sharper radius for classic look */
+  --radius-lg: 12px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px rgba(26, 35, 58, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(26, 35, 58, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(26, 35, 58, 0.08);
+
+  --header-height: 64px;
+  --nav-height: 60px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 
   /* Transitions */
   --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-
-  /* Z-index */
-  --z-modal: 100;
-  --z-toast: 200;
-
-  /* Safe areas */
-  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --transition-normal: 300ms ease;
 }
 
-/* Light mode */
-[data-theme="light"] {
-  --background: #f8fafc;
-  --surface: #ffffff;
-  --surface-light: #f1f5f9;
-  --text: #0f172a;
-  --text-muted: #64748b;
-  --text-dark: #94a3b8;
-  --border: #e2e8f0;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+/* Dark Mode - Midnight Luxury */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0F1525;
+    /* Deep Midnight */
+    --surface: #1A233A;
+    --surface-light: #232E48;
+
+    --text: #F9F9F7;
+    /* Cream text on dark */
+    --text-muted: #9CA3AF;
+
+    --border: #2C3A5C;
+
+    --stitch-paper-texture: none;
+    /* No paper texture in dark mode or subtle grain */
+  }
+}
+
+body {
+  background-color: var(--background);
+  background-image: var(--stitch-paper-texture);
+  /* Texture overlay */
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* Profile colors */
