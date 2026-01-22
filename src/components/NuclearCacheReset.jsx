@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-// Force a new version timestamp here manually on every deploy affecting cache
-const CURRENT_VERSION = '2.2.3-' + new Date().getTime();
+// Fixed: Use static string to prevent infinite reload loop on module re-evaluation
+const CURRENT_VERSION = '2.2.4-static-fix';
 
 export default function NuclearCacheReset() {
     useEffect(() => {
