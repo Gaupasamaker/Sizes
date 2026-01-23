@@ -136,8 +136,8 @@ button {
     width: 56px;
     height: 56px;
     border-radius: var(--radius-full);
-    background: var(--primary);
-    color: white;
+    background: var(--stitch-gold);
+    color: var(--stitch-navy);
     box-shadow: var(--shadow-lg);
     display: flex;
     align-items: center;
@@ -146,8 +146,12 @@ button {
     z-index: 50;
 }
 
+.fab svg {
+    color: var(--stitch-navy) !important;
+}
+
 .fab:hover {
-    background: var(--primary-light);
+    background: var(--stitch-gold-light);
     transform: scale(1.05);
 }
 

@@ -137,9 +137,8 @@
 .profile-info h3 {
     font-family: var(--font-serif);
     font-size: 1.5rem;
-    /* Larger, editorial size */
     font-weight: 700;
-    color: var(--stitch-navy);
+    color: var(--text);
     letter-spacing: -0.02em;
     white-space: nowrap;
     overflow: hidden;
