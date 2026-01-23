@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icons/*.png'],
+      includeAssets: ['favicon.ico', 'icons/*.png', 'logo-*.png'],
       manifest: {
         name: 'Sizes',
         short_name: 'Sizes',
@@ -16,7 +16,6 @@ export default defineConfig({
         background_color: '#F9F9F7',
         display: 'standalone',
         start_url: '/',
-        // Forced update: v2.2.1
         icons: [
           {
             src: 'icons/icon-192x192.png',
@@ -34,6 +33,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        // Force cache invalidation on new deployments
+        skipWaiting: true,
+        clientsClaim: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
