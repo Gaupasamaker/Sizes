@@ -109,6 +109,54 @@ export const KIDS_SHOES_EQUIVALENCES = {
         ['33', '1', '1.5', '21', '8-9 años'],
         ['34', '1.5', '2', '21.5', '9 años'],
         ['35', '2.5', '3', '22', '10 años'],
+        ['36', '3', '3.5', '22.5', '10-11 años'],
+        ['37', '4', '4.5', '23.5', '11-12 años'],
+    ]
+};
+
+// Kids Tops (camisetas, jerseys)
+export const KIDS_TOPS_EQUIVALENCES = {
+    headers: ['Talla', 'Edad', 'Altura (cm)', 'Pecho (cm)'],
+    rows: [
+        ['74', '6-9 m', '68-74', '47-49'],
+        ['80', '9-12 m', '74-80', '49-51'],
+        ['86', '12-18 m', '80-86', '51-53'],
+        ['92', '18-24 m', '86-92', '53-55'],
+        ['98', '2-3 años', '92-98', '54-56'],
+        ['104', '3-4 años', '98-104', '55-57'],
+        ['110', '4-5 años', '104-110', '57-59'],
+        ['116', '5-6 años', '110-116', '59-61'],
+        ['122', '6-7 años', '116-122', '61-63'],
+        ['128', '7-8 años', '122-128', '63-65'],
+        ['134', '8-9 años', '128-134', '65-68'],
+        ['140', '9-10 años', '134-140', '68-71'],
+        ['146', '10-11 años', '140-146', '71-74'],
+        ['152', '11-12 años', '146-152', '74-78'],
+        ['158', '12-13 años', '152-158', '78-82'],
+        ['164', '13-14 años', '158-164', '82-86'],
+    ]
+};
+
+// Kids Bottoms (pantalones)
+export const KIDS_BOTTOMS_EQUIVALENCES = {
+    headers: ['Talla', 'Edad', 'Altura (cm)', 'Cintura (cm)'],
+    rows: [
+        ['74', '6-9 m', '68-74', '46-48'],
+        ['80', '9-12 m', '74-80', '48-50'],
+        ['86', '12-18 m', '80-86', '50-51'],
+        ['92', '18-24 m', '86-92', '51-52'],
+        ['98', '2-3 años', '92-98', '52-53'],
+        ['104', '3-4 años', '98-104', '53-54'],
+        ['110', '4-5 años', '104-110', '54-55'],
+        ['116', '5-6 años', '110-116', '55-56'],
+        ['122', '6-7 años', '116-122', '56-58'],
+        ['128', '7-8 años', '122-128', '58-60'],
+        ['134', '8-9 años', '128-134', '60-62'],
+        ['140', '9-10 años', '134-140', '62-64'],
+        ['146', '10-11 años', '140-146', '64-66'],
+        ['152', '11-12 años', '146-152', '66-68'],
+        ['158', '12-13 años', '152-158', '68-71'],
+        ['164', '13-14 años', '158-164', '71-74'],
     ]
 };
 
@@ -241,9 +289,33 @@ export function getAllEquivalences(language = 'es') {
         },
         // KIDS
         {
+            id: 'kids_tops',
+            title: language === 'es' ? '👕 Camisetas / Tops (Niños)' : '👕 Kids Tops',
+            shortTitle: language === 'es' ? 'Camisetas' : 'Tops',
+            data: {
+                headers: language === 'es'
+                    ? ['Talla', 'Edad', 'Altura (cm)', 'Pecho (cm)']
+                    : ['Size', 'Age', 'Height (cm)', 'Chest (cm)'],
+                rows: KIDS_TOPS_EQUIVALENCES.rows
+            },
+            gender: ['child']
+        },
+        {
+            id: 'kids_bottoms',
+            title: language === 'es' ? '👖 Pantalones (Niños)' : '👖 Kids Pants',
+            shortTitle: language === 'es' ? 'Pantalones' : 'Pants',
+            data: {
+                headers: language === 'es'
+                    ? ['Talla', 'Edad', 'Altura (cm)', 'Cintura (cm)']
+                    : ['Size', 'Age', 'Height (cm)', 'Waist (cm)'],
+                rows: KIDS_BOTTOMS_EQUIVALENCES.rows
+            },
+            gender: ['child']
+        },
+        {
             id: 'kids_shoes',
             title: language === 'es' ? '👟 Calzado Infantil' : '👟 Kids Shoes',
-            shortTitle: language === 'es' ? 'Niños' : 'Kids',
+            shortTitle: language === 'es' ? 'Calzado' : 'Shoes',
             data: {
                 headers: language === 'es' ? ['EU', 'UK', 'US', 'cm', 'Edad aprox.'] : ['EU', 'UK', 'US', 'cm', 'Approx Age'],
                 rows: KIDS_SHOES_EQUIVALENCES.rows
