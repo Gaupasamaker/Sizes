@@ -75,12 +75,16 @@
     content: '';
     position: absolute;
     top: 12px;
-    left: 12px;
+    left: 8px;
     bottom: 12px;
     width: 4px;
     background-color: var(--profile-color);
     border-radius: 2px;
     opacity: 0.8;
+}
+
+.profile-card .profile-header {
+    margin-left: 12px;
 }
 
 /* Specific overrides for color classes to set CSS variable */

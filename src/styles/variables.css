@@ -161,3 +161,35 @@ h6 {
 .profile-color-cyan {
   --profile-color: #06b6d4;
 }
+
+/* Global Dark Mode Icon Visibility */
+[data-theme="dark"] .settings-item-icon,
+[data-theme="dark"] .btn-ghost,
+[data-theme="dark"] .btn-icon,
+[data-theme="dark"] svg {
+  color: var(--stitch-gold-light);
+}
+
+@media (prefers-color-scheme: dark) {
+
+  .settings-item-icon,
+  .btn-ghost,
+  .btn-icon,
+  svg {
+    color: var(--stitch-gold-light);
+  }
+
+  /* Ensure text elements don't get gold color */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  a,
+  label {
+    color: inherit;
+  }
+}
