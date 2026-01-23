@@ -37,6 +37,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
+    padding-bottom: calc(80px + var(--spacing-xl));
 }
 
 /* Stitch Luxury Card Style - Enhanced */
@@ -186,6 +187,52 @@
     display: flex;
     gap: var(--spacing-xs);
     flex-shrink: 0;
+    position: relative;
+}
+
+.profile-actions .menu-trigger {
+    padding: var(--spacing-xs);
+}
+
+/* Dropdown Menu */
+.profile-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    min-width: 140px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.profile-menu button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.profile-menu button:hover {
+    background: var(--surface-light);
+}
+
+.profile-menu button.danger {
+    color: var(--error);
+}
+
+.profile-menu button.danger:hover {
+    background: rgba(184, 92, 92, 0.1);
 }
 
 .profile-actions .btn {

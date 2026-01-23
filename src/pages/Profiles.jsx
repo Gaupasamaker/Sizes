@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, User, UserRound, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
+import { Plus, User, UserRound, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock, MoreVertical, X } from 'lucide-react';
 import ReloadPrompt from '../components/ReloadPrompt';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
@@ -16,6 +16,7 @@ export default function Profiles() {
     const [editingProfile, setEditingProfile] = useState(null);
     const [formData, setFormData] = useState({ name: '', color: 'blue', type: 'man' });
     const [shareMessage, setShareMessage] = useState(null);
+    const [openMenuId, setOpenMenuId] = useState(null);
     const navigate = useNavigate();
     const { language, setLanguage, t } = useLanguage();
 
@@ -198,26 +199,31 @@ export default function Profiles() {
                                     </div>
                                     <div className="profile-actions">
                                         <button
-                                            className="btn btn-ghost btn-icon"
-                                            onClick={(e) => handleShare(profile, e)}
-                                            title={t('share')}
+                                            className="btn btn-ghost btn-icon menu-trigger"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setOpenMenuId(openMenuId === profile.id ? null : profile.id);
+                                            }}
+                                            title={t('more_options') || 'Más opciones'}
                                         >
-                                            <Share2 size={18} />
+                                            <MoreVertical size={20} />
                                         </button>
-                                        <button
-                                            className="btn btn-ghost btn-icon"
-                                            onClick={(e) => handleEdit(profile, e)}
-                                            title={t('edit')}
-                                        >
-                                            <Edit2 size={18} />
-                                        </button>
-                                        <button
-                                            className="btn btn-ghost btn-icon"
-                                            onClick={(e) => handleDelete(profile.id, e)}
-                                            title={t('delete')}
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
+                                        {openMenuId === profile.id && (
+                                            <div className="profile-menu">
+                                                <button onClick={(e) => { handleShare(profile, e); setOpenMenuId(null); }}>
+                                                    <Share2 size={16} />
+                                                    <span>{t('share')}</span>
+                                                </button>
+                                                <button onClick={(e) => { handleEdit(profile, e); setOpenMenuId(null); }}>
+                                                    <Edit2 size={16} />
+                                                    <span>{t('edit')}</span>
+                                                </button>
+                                                <button className="danger" onClick={(e) => { handleDelete(profile.id, e); setOpenMenuId(null); }}>
+                                                    <Trash2 size={16} />
+                                                    <span>{t('delete')}</span>
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
