@@ -47,19 +47,18 @@
     gap: var(--spacing-md);
     padding: var(--spacing-lg);
     background: var(--surface);
-    /* Realistic Stitch Effect: Dashed border with inner shadow for depth */
     border: 2px dashed var(--stitch-gold-light);
     box-shadow:
         inset 0 0 0 4px var(--surface),
-        /* Inner gap */
         inset 0 0 0 5px rgba(197, 160, 101, 0.1),
-        /* Inner faint line */
         var(--shadow-sm);
-    /* External shadow */
     border-radius: var(--radius-sm);
     position: relative;
-    /* Removed overflow: hidden to allow dropdown to show */
     transition: all var(--transition-fast);
+}
+
+.profile-card.menu-open {
+    z-index: 50;
 }
 
 .profile-card:hover {
