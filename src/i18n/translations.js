@@ -67,6 +67,8 @@ export const translations = {
         take_photo: 'Hacer foto a la etiqueta',
         size_notes_placeholder: 'Ej: Tomar una talla más...',
         delete_size_confirm: '¿Eliminar esta talla?',
+        delete_size: 'Eliminar talla',
+        delete_brand: 'Eliminar marca',
         first_size_hint: 'Pulsa + para añadir tu primera talla',
 
         // Categories
@@ -189,6 +191,8 @@ export const translations = {
         take_photo: 'Take photo of label',
         size_notes_placeholder: 'E.g: Size up one...',
         delete_size_confirm: 'Delete this size?',
+        delete_size: 'Delete size',
+        delete_brand: 'Delete brand',
         first_size_hint: 'Tap + to add your first size',
 
         // Categories
