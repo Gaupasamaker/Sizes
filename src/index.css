@@ -1,0 +1,4 @@
+/* Ocultar FAB cuando el modal está abierto */
+body.modal-open .fab {
+    display: none !important;
+}
