@@ -7,7 +7,7 @@ import { useLanguage } from '../hooks/useLanguage';
 import './SharedProfile.css';
 
 // Custom Woman icon with long hair
-// Custom Woman icon with long hair (Based on user image)
+// Custom Woman icon with long hair (High Fidelity Trace)
 const WomanIcon = ({ size = 24, ...props }) => (
     <svg
         width={size}
@@ -15,20 +15,24 @@ const WomanIcon = ({ size = 24, ...props }) => (
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
         {...props}
     >
-        <path d="M7 11.5V10c0-3 2-4.5 5-4.5s5 1.5 5 4.5v1.5c0 3.5-1.5 6.5-5 6.5s-5-3-5-6.5z" />
-        <path d="M12 14a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-        <path d="M10 6.5c0-1 1-1.5 2-1.5s2 .5 2 1.5" />
-        <path d="M6 22c0-2.5 2-4.5 6-4.5s6 2 6 4.5" />
-        <path d="M12 17.5l-2.5 2.5h5L12 17.5z" />
+        {/* Hair outline */}
+        <path d="M12 6c-4 0-6 2.5-6 6.5s1 7 4 8" />
+        <path d="M12 6c4 0 6 2.5 6 6.5s-1 7-4 8" />
+        <path d="M9 7c1-1 3-1 3 0s2 1 3 0" />
+        {/* Face */}
+        <circle cx="12" cy="12" r="4" />
+        {/* Shoulders & Neck */}
+        <path d="M5 22c0-3 3-5 7-5s7 2 7 5" />
+        <path d="M9.5 18.5l2.5 2 2.5-2" />
     </svg>
 );
 
-// Custom Man icon with short hair (Based on user image)
+// Custom Man icon with short hair (High Fidelity Trace)
 const ManIcon = ({ size = 24, ...props }) => (
     <svg
         width={size}
@@ -36,17 +40,21 @@ const ManIcon = ({ size = 24, ...props }) => (
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
         {...props}
     >
-        <path d="M8 8.5c0-2 1.5-3.5 4-3.5s4 1 4 3.5" />
-        <path d="M9 7c0-1 1-1.5 2-1.5" />
-        <path d="M13 5.5l1.5 1.5" />
-        <path d="M12 14a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-        <path d="M6 22c0-2.5 2-4.5 6-4.5s6 2 6 4.5" />
-        <path d="M12 17.5l-2.5 2.5h5L12 17.5z" />
+        {/* Hair/Head top */}
+        <path d="M8 9.5c0-3 1.5-4.5 4-4.5s4 1.5 4 4.5" />
+        <path d="M8 9.5c0 .5.5 1 1 1" />
+        <path d="M16 9.5c0 .5-.5 1-1 1" />
+        <path d="M10 6.5l2-1.5 2.5 1.5" />
+        {/* Face */}
+        <circle cx="12" cy="12" r="4" />
+        {/* Shoulders & Neck */}
+        <path d="M5 22c0-3 3-5 7-5s7 2 7 5" />
+        <path d="M10 18.5c0 2 4 2 4 0" />
     </svg>
 );
 
