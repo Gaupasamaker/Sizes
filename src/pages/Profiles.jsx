@@ -4,7 +4,10 @@ import { Plus, User, UserRound, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby,
 import ReloadPrompt from '../components/ReloadPrompt';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
-import { getProfiles, createProfile, updateProfile, deleteProfile, PROFILE_COLORS } from '../services/db';
+import { getProfiles, createProfile, updateProfile, deleteProfile, updateProfileOrder, PROFILE_COLORS } from '../services/db';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, TouchSensor } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { generateShareLink, copyToClipboard, nativeShare } from '../services/share';
 import { useLanguage } from '../hooks/useLanguage';
 import './Profiles.css';
@@ -158,6 +161,93 @@ const ChildIcon = ({ size = 24, ...props }) => (
     </svg>
 );
 
+// Sortable Profile Card Component
+function SortableProfileCard({ profile, onClick, openMenuId, setOpenMenuId, handleShare, handleEdit, handleDelete, handleCheckSizes, needsCheck, t }) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging
+    } = useSortable({ id: profile.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+        touchAction: 'none', // Critical for touch dragging
+        zIndex: isDragging ? 999 : 'auto',
+        position: 'relative'
+    };
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            className={`profile-card card card-interactive profile-color-${profile.color} profile-border-${profile.color} ${openMenuId === profile.id ? 'menu-open' : ''}`}
+            onClick={onClick}
+        >
+            <div className="profile-header">
+                <div className="profile-avatar">
+                    {profile.type === 'woman' ? <WomanIcon size={48} /> :
+                        (profile.type === 'child' || profile.isChild) ? <ChildIcon size={48} /> :
+                            <ManIcon size={48} />}
+                </div>
+                <div className="profile-info">
+                    <h3>{profile.name}</h3>
+                    <span>
+                        {profile.type === 'woman' ? t('type_woman') :
+                            (profile.type === 'child' || profile.isChild) ? t('type_child') :
+                                t('type_man')}
+                    </span>
+                    {needsCheck && (
+                        <div className="growth-warning" onClick={(e) => handleCheckSizes(profile, e)}>
+                            <Clock size={14} />
+                            <span>{t('check_sizes')}</span>
+                        </div>
+                    )}
+                </div>
+                <div className="profile-actions">
+                    <button
+                        className="btn btn-ghost btn-icon menu-trigger" // Removed menu-trigger class to stop bubbling? No, keep it but handle stopPropagation
+                        onPointerDown={(e) => e.stopPropagation()} // Stop drag from starting on menu button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenMenuId(openMenuId === profile.id ? null : profile.id);
+                        }}
+                        title={t('more_options') || 'Más opciones'}
+                    >
+                        <MoreVertical size={20} />
+                    </button>
+                    {openMenuId === profile.id && (
+                        <div className="profile-menu">
+                            <button onPointerDown={(e) => e.stopPropagation()} onClick={(e) => { handleShare(profile, e); setOpenMenuId(null); }}>
+                                <Share2 size={16} />
+                                <span>{t('share')}</span>
+                            </button>
+                            <button onPointerDown={(e) => e.stopPropagation()} onClick={(e) => { handleEdit(profile, e); setOpenMenuId(null); }}>
+                                <Edit2 size={16} />
+                                <span>{t('edit')}</span>
+                            </button>
+                            <button className="danger" onPointerDown={(e) => e.stopPropagation()} onClick={(e) => { handleDelete(profile.id, e); setOpenMenuId(null); }}>
+                                <Trash2 size={16} />
+                                <span>{t('delete')}</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {needsCheck && (
+                <p className="growth-message">{t('check_sizes_hint')}</p>
+            )}
+        </div>
+    );
+}
+
 export default function Profiles() {
     const [profiles, setProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -170,9 +260,51 @@ export default function Profiles() {
     const navigate = useNavigate();
     const { language, setLanguage, t } = useLanguage();
 
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8, // Require 8px movement to start drag (allows clicking)
+            },
+        }),
+        useSensor(TouchSensor, {
+            // Press delay of 250ms, with tolerance of 5px of movement
+            activationConstraint: {
+                delay: 250,
+                tolerance: 5,
+            },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
     useEffect(() => {
         loadProfiles();
     }, []);
+
+    async function handleDragEnd(event) {
+        const { active, over } = event;
+
+        if (active.id !== over.id) {
+            setProfiles((items) => {
+                const oldIndex = items.findIndex((item) => item.id === active.id);
+                const newIndex = items.findIndex((item) => item.id === over.id);
+
+                const newItems = arrayMove(items, oldIndex, newIndex);
+
+                // Update displayOrder for all affected items
+                const updatedItems = newItems.map((item, index) => ({
+                    ...item,
+                    displayOrder: index
+                }));
+
+                // Persist new order to DB asynchronously
+                updateProfileOrder(updatedItems).catch(console.error);
+
+                return updatedItems;
+            });
+        }
+    }
 
     async function loadProfiles() {
         try {
@@ -335,71 +467,32 @@ export default function Profiles() {
                 </div>
             ) : (
                 <div className="profiles-grid animate-slideUp">
-                    {profiles.map((profile) => {
-                        const needsCheck = checkGrowthReminder(profile);
-
-                        return (
-                            <div
-                                key={profile.id}
-                                className={`profile-card card card-interactive profile-color-${profile.color} profile-border-${profile.color} ${openMenuId === profile.id ? 'menu-open' : ''}`}
-                                onClick={() => navigate(`/profile/${profile.id}`)}
-                            >
-                                <div className="profile-header">
-                                    <div className="profile-avatar">
-                                        {profile.type === 'woman' ? <WomanIcon size={48} /> :
-                                            (profile.type === 'child' || profile.isChild) ? <ChildIcon size={48} /> :
-                                                <ManIcon size={48} />}
-                                    </div>
-                                    <div className="profile-info">
-                                        <h3>{profile.name}</h3>
-                                        <span>
-                                            {profile.type === 'woman' ? t('type_woman') :
-                                                (profile.type === 'child' || profile.isChild) ? t('type_child') :
-                                                    t('type_man')}
-                                        </span>
-                                        {needsCheck && (
-                                            <div className="growth-warning" onClick={(e) => handleCheckSizes(profile, e)}>
-                                                <Clock size={14} />
-                                                <span>{t('check_sizes')}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="profile-actions">
-                                        <button
-                                            className="btn btn-ghost btn-icon menu-trigger"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setOpenMenuId(openMenuId === profile.id ? null : profile.id);
-                                            }}
-                                            title={t('more_options') || 'Más opciones'}
-                                        >
-                                            <MoreVertical size={20} />
-                                        </button>
-                                        {openMenuId === profile.id && (
-                                            <div className="profile-menu">
-                                                <button onClick={(e) => { handleShare(profile, e); setOpenMenuId(null); }}>
-                                                    <Share2 size={16} />
-                                                    <span>{t('share')}</span>
-                                                </button>
-                                                <button onClick={(e) => { handleEdit(profile, e); setOpenMenuId(null); }}>
-                                                    <Edit2 size={16} />
-                                                    <span>{t('edit')}</span>
-                                                </button>
-                                                <button className="danger" onClick={(e) => { handleDelete(profile.id, e); setOpenMenuId(null); }}>
-                                                    <Trash2 size={16} />
-                                                    <span>{t('delete')}</span>
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {needsCheck && (
-                                    <p className="growth-message">{t('check_sizes_hint')}</p>
-                                )}
-                            </div>
-                        );
-                    })}
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <SortableContext
+                            items={profiles}
+                            strategy={verticalListSortingStrategy}
+                        >
+                            {profiles.map((profile) => (
+                                <SortableProfileCard
+                                    key={profile.id}
+                                    profile={profile}
+                                    onClick={() => navigate(`/profile/${profile.id}`)}
+                                    openMenuId={openMenuId}
+                                    setOpenMenuId={setOpenMenuId}
+                                    handleShare={handleShare}
+                                    handleEdit={handleEdit}
+                                    handleDelete={handleDelete}
+                                    handleCheckSizes={handleCheckSizes}
+                                    needsCheck={checkGrowthReminder(profile)}
+                                    t={t}
+                                />
+                            ))}
+                        </SortableContext>
+                    </DndContext>
                 </div>
             )}
 

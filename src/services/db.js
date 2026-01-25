@@ -39,7 +39,9 @@ function generateId() {
 
 export async function getProfiles() {
     const db = await initDB();
-    return db.getAll('profiles');
+    const profiles = await db.getAll('profiles');
+    // Sort by displayOrder (ascending)
+    return profiles.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 }
 
 export async function getProfile(id) {
@@ -61,6 +63,7 @@ export async function createProfile(data) {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         type: data.type || (data.isChild ? 'child' : 'man'),
+        displayOrder: data.displayOrder || Date.now(), // Default to timestamp for simple chronological sort
         lastCheck: new Date().toISOString()
     };
     await db.add('profiles', profile);
@@ -87,6 +90,18 @@ export async function deleteProfile(id) {
     }
 
     await db.delete('profiles', id);
+}
+
+export async function updateProfileOrder(profiles) {
+    const db = await initDB();
+    const tx = db.transaction('profiles', 'readwrite');
+    const store = tx.objectStore('profiles');
+
+    for (const profile of profiles) {
+        await store.put(profile);
+    }
+
+    await tx.done;
 }
 
 // ============ BRANDS ============
