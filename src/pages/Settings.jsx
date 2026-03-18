@@ -139,19 +139,13 @@ export default function Settings() {
                             </div>
                             <div className="settings-item-content">
                                 <h4>Sizes</h4>
-                                <p>{t('version')} 1.3.0</p>
+                                <p>{t('version')} 1.4.0</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Install PWA hint */}
-                <section className="settings-section">
-                    <div className="pwa-hint card">
-                        <h4>💡 {t('install_app')}</h4>
-                        <p>{t('install_hint')}</p>
-                    </div>
-                </section>
+
             </div>
 
             {/* Toast message */}

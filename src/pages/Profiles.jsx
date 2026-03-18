@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Plus, User, UserRound, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock, MoreVertical, X } from 'lucide-react';
 import ReloadPrompt from '../components/ReloadPrompt';
@@ -8,8 +8,9 @@ import { getProfiles, createProfile, updateProfile, deleteProfile, updateProfile
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, TouchSensor } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { generateShareLink, copyToClipboard, nativeShare } from '../services/share';
+import { shareProfileAsImage } from '../services/share';
 import { useLanguage } from '../hooks/useLanguage';
+import { ProfileShareCard } from '../components/ProfileShareCard';
 import './Profiles.css';
 
 // Icono de Mujer exacto proporcionado por el usuario (SVG)
@@ -257,8 +258,11 @@ export default function Profiles() {
     const [shareMessage, setShareMessage] = useState(null);
     const [openMenuId, setOpenMenuId] = useState(null);
     const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+    const [profileToShare, setProfileToShare] = useState(null);
+    const [brandsToShare, setBrandsToShare] = useState([]);
+    const shareCardRef = useRef(null);
     const navigate = useNavigate();
-    const { language, setLanguage, t } = useLanguage();
+    const { t } = useLanguage();
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -342,10 +346,6 @@ export default function Profiles() {
         setFormData({ name: '', color: 'blue', type: 'man', height: '', weight: '' });
     }
 
-    function toggleLanguage() {
-        setLanguage(language === 'es' ? 'en' : 'es');
-    }
-
     // Check if profile needs size review (3 months)
     function checkGrowthReminder(profile) {
         const isChild = profile.type === 'child' || profile.isChild === true;
@@ -417,22 +417,44 @@ export default function Profiles() {
 
     async function handleShare(profile, e) {
         e.stopPropagation();
+
         try {
-            const url = await generateShareLink(profile.id);
+            setShareMessage(t('generating_image') || 'Generando imagen...');
 
-            const shared = await nativeShare(
-                `${t('share_title')} ${profile.name}`,
-                t('share_text'),
-                url
-            );
+            // Get brands and sizes for the card
+            const { getBrandsByProfile, getSizesByBrand } = await import('../services/db');
+            const brands = await getBrandsByProfile(profile.id);
+            const brandsWithSizes = [];
 
-            if (!shared) {
-                await copyToClipboard(url);
-                setShareMessage(`${t('link_copied')} ${profile.name}`);
-                setTimeout(() => setShareMessage(null), 3000);
+            for (const brand of brands) {
+                const sizes = await getSizesByBrand(brand.id);
+                brandsWithSizes.push({
+                    ...brand,
+                    sizes: sizes
+                });
             }
+
+            setProfileToShare(profile);
+            setBrandsToShare(brandsWithSizes);
+
+            // Wait for React to render the component
+            setTimeout(async () => {
+                if (shareCardRef.current) {
+                    const success = await shareProfileAsImage(profile, shareCardRef.current);
+
+                    if (success) {
+                        setShareMessage(t('shared_successfully') || 'Compartido con éxito');
+                    } else {
+                        setShareMessage(t('share_error') || 'Error al compartir');
+                    }
+                    setTimeout(() => setShareMessage(null), 3000);
+                }
+                setProfileToShare(null);
+            }, 300); // Small delay to ensure DOM is ready and styled
+
         } catch (error) {
-            console.error('Error sharing:', error);
+            console.error('Error in share process:', error);
+            setShareMessage(t('share_error') || 'Error al compartir');
         }
     }
 
@@ -449,6 +471,16 @@ export default function Profiles() {
     return (
         <Layout title={t('app_name')}>
             <ReloadPrompt />
+
+            {/* Hidden component for generating share image */}
+            {profileToShare && (
+                <ProfileShareCard
+                    ref={shareCardRef}
+                    profile={profileToShare}
+                    brands={brandsToShare}
+                />
+            )}
+
             {/* Size Guide Link */}
             <Link to="/size-guide" className="size-guide-link card animate-fadeIn">
                 <Ruler size={24} />

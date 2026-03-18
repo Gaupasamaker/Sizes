@@ -1,4 +1,8 @@
 import { openDB } from 'idb';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
+import { Capacitor } from '@capacitor/core';
+
 
 const DB_NAME = 'sizes-app';
 const DB_VERSION = 1;
@@ -217,15 +221,42 @@ export async function exportData() {
         sizes
     };
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
+    const jsonStr = JSON.stringify(data, null, 2);
+    const fileName = `sizes-backup-${new Date().toISOString().split('T')[0]}.json`;
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `sizes-backup-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
+    if (Capacitor.isNativePlatform()) {
+        try {
+            // Write to cache directory
+            const result = await Filesystem.writeFile({
+                path: fileName,
+                data: jsonStr,
+                directory: Directory.Cache,
+                encoding: 'utf8'
+            });
 
-    URL.revokeObjectURL(url);
+            // Share the file
+            await Share.share({
+                title: 'Respaldos de Tallas',
+                text: 'Aquí está tu archivo de respaldo de tus tallas.',
+                url: result.uri,
+                dialogTitle: 'Exportar datos',
+            });
+        } catch (error) {
+            console.error('Error sharing native backup:', error);
+            throw error;
+        }
+    } else {
+        // Fallback for web
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }
 }
 
 export async function importData(file) {

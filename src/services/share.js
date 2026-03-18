@@ -1,6 +1,10 @@
 // Share functionality - encode/decode profile data for sharing
 import { getProfile, getBrandsByProfile, getSizesByBrand } from './db';
 import pako from 'pako';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
+import { Capacitor } from '@capacitor/core';
+import html2canvas from 'html2canvas';
 
 // Compress and encode profile data for sharing
 export async function generateShareLink(profileId) {
@@ -87,4 +91,56 @@ export async function nativeShare(title, text, url) {
         return true;
     }
     return false;
+}
+
+// Share Profile as Image
+export async function shareProfileAsImage(profile, domNode) {
+    if (!profile || !domNode) return false;
+
+    try {
+        // Generate image with html2canvas
+        const canvas = await html2canvas(domNode, {
+            scale: 2, // High resolution
+            useCORS: true,
+            backgroundColor: null // Transparent logic handled by component
+        });
+
+        // Convert canvas to Data URL (JPEG)
+        const base64DataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        // Remove the data:image/jpeg;base64, prefix for Capacitor
+        const base64Data = base64DataUrl.split(',')[1];
+
+        const fileName = `tallas-${profile.name.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.jpg`;
+
+        if (Capacitor.isNativePlatform()) {
+            // Write to device Cache directory
+            const savedFile = await Filesystem.writeFile({
+                path: fileName,
+                data: base64Data,
+                directory: Directory.Cache
+            });
+
+            // Share native
+            await Share.share({
+                title: `Tallas de ${profile.name}`,
+                text: `Mira las tallas de ${profile.name}`,
+                url: savedFile.uri,
+                dialogTitle: 'Compartir tallas',
+            });
+            return true;
+        } else {
+            // Fallback for Web/PWA
+            const a = document.createElement('a');
+            a.href = base64DataUrl;
+            a.download = fileName;
+            a.click();
+
+            // Still try nativeShare if web share API supports files (rarely works well but good fallback)
+            // But downloading is safer for web
+            return true;
+        }
+    } catch (error) {
+        console.error('Error sharing image:', error);
+        return false;
+    }
 }

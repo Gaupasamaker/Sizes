@@ -110,8 +110,7 @@ export const translations = {
         import_error: 'Error al importar. Verifica que el archivo es válido.',
         info: 'Información',
         version: 'Versión',
-        install_app: 'Instala la app',
-        install_hint: 'En Chrome o Safari, pulsa el menú (⋮) y selecciona "Añadir a pantalla de inicio" o "Instalar" para tener Sizes como una app en tu dispositivo.',
+
         language: 'Idioma',
 
         // Share
@@ -125,6 +124,9 @@ export const translations = {
         try_sizes: 'Probar Sizes gratis',
         want_save_sizes: '¿Quieres guardar tus propias tallas?',
         photo_label_title: 'Foto de etiqueta',
+        generating_image: 'Generando imagen...',
+        shared_successfully: 'Compartido con éxito',
+        share_error: 'Error al compartir',
     },
 
     en: {
@@ -237,8 +239,7 @@ export const translations = {
         import_error: 'Error importing. Check that the file is valid.',
         info: 'Information',
         version: 'Version',
-        install_app: 'Install the app',
-        install_hint: 'In Chrome or Safari, tap the menu (⋮) and select "Add to Home Screen" or "Install" to have Sizes as an app on your device.',
+
         language: 'Language',
 
         // Share
@@ -252,6 +253,9 @@ export const translations = {
         try_sizes: 'Try Sizes for free',
         want_save_sizes: 'Want to save your own sizes?',
         photo_label_title: 'Label photo',
+        generating_image: 'Generating image...',
+        shared_successfully: 'Shared successfully',
+        share_error: 'Error sharing',
     }
 };
 
