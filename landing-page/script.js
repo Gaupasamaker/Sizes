@@ -97,7 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update with [data-en/data-es]
         document.querySelectorAll('[data-en]').forEach(el => {
-            el.innerHTML = el.getAttribute(`data-${lang}`);
+            const translation = el.getAttribute(`data-${lang}`);
+            if (el.tagName === 'META') {
+                el.setAttribute('content', translation);
+            } else {
+                el.innerHTML = translation;
+            }
             if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
                 el.placeholder = translations[lang].placeholder;
             }

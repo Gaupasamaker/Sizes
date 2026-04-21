@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Guía de Tallas: {{Brand A}} vs {{Brand B}} | Sizes</title>
+    <meta name="description" content="¿Cómo talla {{Brand A}} frente a {{Brand B}}? Descubre las diferencias reales en ropa infantil y de adultos para no fallar nunca en tus compras online.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "cream-bg": "#FDFBF7",
+              "navy-deep": "#0A1128",
+              "gold-accent": "#C5A065",
+            },
+            fontFamily: {
+              "editorial": ["Playfair Display", "serif"],
+              "sans": ["Inter", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        .sidebar-sticky { position: sticky; top: 100px; }
+        .article-content h2 { @apply font-editorial text-3xl text-navy-deep mt-12 mb-6; }
+        .article-content p { @apply text-gray-700 text-lg leading-relaxed mb-6; }
+        .article-content ul { @apply list-disc list-inside mb-6 text-gray-700; }
+        .article-content li { @apply mb-2; }
+    </style>
+</head>
+<body class="bg-cream-bg font-sans antialiased text-navy-deep">
+
+    <!-- Header -->
+    <header class="border-b border-gray-200 bg-white/80 backdrop-blur-md sticky top-0 z-50 h-16 md:h-20 flex items-center">
+        <div class="max-w-6xl mx-auto px-6 w-full flex justify-between items-center">
+            <a href="/"><img src="../assets/logo_cinta_cropped.png" alt="Sizes" class="h-8 md:h-10"></a>
+            <a href="https://play.google.com/store/apps/details?id=com.sizes.app" class="bg-navy-deep text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-gold-accent transition-colors">Descargar App</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 md:py-20 flex flex-col lg:flex-row gap-16">
+        <!-- Main Content -->
+        <article class="w-full lg:w-[65%] article-content">
+            <nav class="text-sm text-gray-400 mb-8">
+                <a href="/" class="hover:text-gold-accent">Inicio</a> / <a href="/guias" class="hover:text-gold-accent">Guías de Tallas</a> / {{Brand A}} vs {{Brand B}}
+            </nav>
+
+            <h1 class="font-editorial text-5xl md:text-6xl leading-tight mb-8">
+                {{Brand A}} vs {{Brand B}}: <br>
+                <span class="italic text-gold-accent">¿Cómo elegir la talla correcta?</span>
+            </h1>
+
+            <div class="aspect-video bg-gray-200 rounded-2xl mb-12 overflow-hidden shadow-lg">
+                <img src="../assets/hero_mother_final.png" alt="Comparativa de tallas" class="w-full h-full object-cover">
+            </div>
+
+            <section id="introduction">
+                <p>Comprar ropa online para uno mismo es difícil, pero comprar para los niños es una lotería. Cada marca tiene su propio criterio: lo que en {{Brand A}} es una talla 4, en {{Brand B}} puede ser una 3 o una 5. </p>
+                <p>En esta guía desglosamos las diferencias reales basadas en las medidas corporales y la experiencia de miles de usuarios de la app <strong>Sizes</strong>.</p>
+            </section>
+
+            <section id="brand-a">
+                <h2>¿Cómo talla {{Brand A}}?</h2>
+                <p>Contenido detallado sobre {{Brand A}}...</p>
+            </section>
+
+            <section id="brand-b">
+                <h2>¿Cómo talla {{Brand B}}?</h2>
+                <p>Contenido detallado sobre {{Brand B}}...</p>
+            </section>
+
+            <section id="comparison">
+                <h2>La Comparativa Real</h2>
+                <div class="overflow-x-auto mb-12">
+                    <table class="w-full text-left border-collapse bg-white rounded-xl shadow-sm overflow-hidden">
+                        <thead>
+                            <tr class="bg-navy-deep text-white">
+                                <th class="p-4">Medida</th>
+                                <th class="p-4">{{Brand A}}</th>
+                                <th class="p-4">{{Brand B}}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600">
+                            <tr class="border-b">
+                                <td class="p-4 font-bold">Corte</td>
+                                <td class="p-4">Slim / Ajustado</td>
+                                <td class="p-4">Oversize / Generoso</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-4 font-bold">Largo</td>
+                                <td class="p-4">Estándar</td>
+                                <td class="p-4">Largo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </article>
+
+        <!-- Sidebar / CTA -->
+        <aside class="w-full lg:w-[35%]">
+            <div class="sidebar-sticky">
+                <div class="bg-navy-deep text-white p-8 rounded-3xl shadow-xl overflow-hidden relative">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-gold-accent opacity-20 rounded-full blur-3xl"></div>
+                    <h3 class="font-editorial text-3xl mb-4 relative z-10">Olvida las devoluciones para siempre.</h3>
+                    <p class="text-gray-300 mb-8 relative z-10 font-light">Guarda las medidas de toda tu familia en Sizes y nosotros te diremos qué talla comprar en cada marca.</p>
+                    
+                    <a href="https://play.google.com/store/apps/details?id=com.sizes.app" target="_blank" class="block transition-transform hover:scale-105">
+                        <img src="../assets/google-play-badge-es.png" alt="Google Play" class="h-16 w-auto">
+                    </a>
+                    
+                    <div class="mt-8 border-t border-white/10 pt-8">
+                        <p class="text-xs text-gray-400 uppercase tracking-widest mb-4">Lo que dicen los padres:</p>
+                        <blockquote class="italic text-gray-300 text-sm">
+                            "Ya no tengo que adivinar si a mi hijo le vale la 4 o la 5 de Zara. Lo tengo todo en la app."
+                        </blockquote>
+                        <p class="text-gold-accent text-xs mt-2">— Marta, usuario de Sizes</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-12 text-center text-gray-400 text-sm">
+        <p>© 2026 SIZES. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
