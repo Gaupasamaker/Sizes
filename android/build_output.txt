@@ -1,0 +1,55 @@
+﻿Initialized native services in: C:\Users\Usuario\.gradle\native
+Initialized jansi services in: C:\Users\Usuario\.gradle\native
+The client will now receive all logging from the daemon (pid: 50080). The daemon log file: C:\Users\Usuario\.gradle\daemon\9.1.0\daemon-50080.out.log
+Starting 5th build in daemon [uptime: 17 mins 11.308 secs, performance: 99%, GC rate: 0.17/s, heap usage: 3% of 1.5 GiB]
+Using 16 worker leases.
+Now considering [C:\Users\Usuario\OneDrive\ESCRITORIO\Antigravity\Tallas\android] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Settings evaluated using settings file 'C:\Users\Usuario\OneDrive\ESCRITORIO\Antigravity\Tallas\android\settings.gradle'.
+Projects loaded. Root project using build file 'C:\Users\Usuario\OneDrive\ESCRITORIO\Antigravity\Tallas\android\build.gradle'.
+Included projects: [root project 'android', project ':app', project ':capacitor-android', project ':capacitor-cordova-android-plugins']
+
+> Configure project :
+Evaluating root project 'android' using build file 'C:\Users\Usuario\OneDrive\ESCRITORIO\Antigravity\Tallas\android\build.gradle'.
+
+> Configure project :app
+Evaluating project ':app' using build file 'C:\Users\Usuario\OneDrive\ESCRITORIO\Antigravity\Tallas\android\app\build.gradle'.
+Using default execution profile
+
+[Incubating] Problems report is available at: file:///C:/Users/Usuario/OneDrive/ESCRITORIO/Antigravity/Tallas/android/build/reports/problems/problems-report.html
+.\gradlew.bat : 
+En línea: 1 Carácter: 107
++ ... jdk-17.0.18+8"; .\gradlew.bat clean bundleRelease --info 2>&1 | Out-F ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+FAILURE: Build failed with an exception.
+
+* Where:
+Build file 
+'C:\Users\Usuario\OneDrive\ESCRITORIO\Antigravity\Tallas\android\app\build.gradle' line: 41
+
+* What went wrong:
+A problem occurred evaluating project ':app'.
+> `getDefaultProguardFile('proguard-android.txt')` is no longer supported since it 
+includes `-dontoptimize`, which prevents R8 from performing many optimizations. Instead 
+use `getDefaultProguardFile('proguard-android-optimize.txt)`, and if needed, temporarily 
+use `-dontoptimize` in a custom keep rule file while fixing breakages.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.1.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 11s
+Watched directory hierarchies: []
